@@ -1,3 +1,6 @@
+#include "process.h"
+#include "linux_parser.h"
+
 #include <unistd.h>
 
 #include <cctype>
@@ -5,9 +8,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include "process.h"
-#include "linux_parser.h"
 
 using std::string;
 using std::to_string;

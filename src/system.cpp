@@ -1,4 +1,7 @@
 #include "system.h"
+#include "linux_parser.h"
+#include "process.h"
+#include "processor.h"
 
 #include <unistd.h>
 
@@ -6,11 +9,6 @@
 #include <set>
 #include <string>
 #include <vector>
-
-#include "system.h"
-#include "linux_parser.h"
-#include "process.h"
-#include "processor.h"
 
 using std::set;
 using std::size_t;
