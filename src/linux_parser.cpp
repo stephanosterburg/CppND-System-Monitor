@@ -3,13 +3,11 @@
 #include <dirent.h>
 #include <unistd.h>
 
-#include <filesystem>
 #include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
 
-namespace fs = std::filesystem;
 using std::stof;
 using std::stoi;
 using std::stol;
@@ -56,7 +54,6 @@ string LinuxParser::Kernel()
 }
 
 // BONUS: Update this to use std::filesystem
-/*
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
   DIR* directory = opendir(kProcDirectory.c_str());
@@ -75,10 +72,13 @@ vector<int> LinuxParser::Pids() {
   closedir(directory);
   return pids;
 }
-*/
-/* C17 */
 
-// https://stackoverflow.com/a/4654718/5983691
+/* C17 filesystem
+https://stackoverflow.com/a/4654718/5983691
+https://www.modernescpp.com/index.php/c-17-more-details-about-the-library
+
+#include <filesystem>
+namespace fs = std::filesystem;
 bool is_number(const std::string& s)
 {
     std::string::const_iterator it = s.begin();
@@ -107,6 +107,7 @@ vector<int> LinuxParser::Pids()
 
     return pids;
 }
+END BONUS*/
 
 // Read and return the system memory utilization
 float LinuxParser::MemoryUtilization()
