@@ -25,11 +25,8 @@ T getValueByKey(std::string const& keyFilter, std::string const& filename)
     if (filestream.is_open()) {
         while (std::getline(filestream, line)) {
             std::istringstream linestream(line);
-            while (linestream >> key >> value) {
-                if (key==keyFilter) {
-                    return value;
-                }
-            }
+            linestream >> key >> value;
+            if (key==keyFilter) return value;
         }
     }
     return value;
