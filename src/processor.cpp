@@ -11,7 +11,8 @@ using std::string;
 using std::vector;
 
 // Return the aggregate CPU utilization
-float Processor::Utilization() { 
+float Processor::Utilization()
+{
     long total_jiffies_start = LinuxParser::Jiffies();
     long active_jiffies_start = LinuxParser::ActiveJiffies();
 

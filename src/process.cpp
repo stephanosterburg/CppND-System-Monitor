@@ -28,7 +28,7 @@ float Process::CpuUtilization()
     // ticks) #17 cstime - Waited-for children's CPU time spent in kernel code (in
     // clock ticks) #22 starttime - Time when the process started, measured in
     // clock ticks
-    vector <string> cpu_utilization = LinuxParser::CpuUtilization(pid_);
+    vector<string> cpu_utilization = LinuxParser::CpuUtilization(pid_);
     long utime = stol(cpu_utilization[13]);
     long stime = stol(cpu_utilization[14]);
     long cutime = stol(cpu_utilization[15]);
@@ -64,6 +64,7 @@ string Process::User() { return LinuxParser::User(pid_); }
 long int Process::UpTime() { return LinuxParser::UpTime(pid_); }
 
 // Overload the "less than" comparison operator for Process objects
-bool Process::operator<(Process& a) {
-  return Process::CpuUtilization()<a.Process::CpuUtilization();
+bool Process::operator<(Process& a)
+{
+    return Process::CpuUtilization()<a.Process::CpuUtilization();
 }

@@ -54,23 +54,24 @@ string LinuxParser::Kernel()
 }
 
 // BONUS: Update this to use std::filesystem
-vector<int> LinuxParser::Pids() {
-  vector<int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
-  struct dirent* file;
-  while ((file = readdir(directory)) != nullptr) {
-    // Is this a directory?
-    if (file->d_type == DT_DIR) {
-      // Is every character of the name a digit?
-      string filename(file->d_name);
-      if (std::all_of(filename.begin(), filename.end(), isdigit)) {
-        int pid = stoi(filename);
-        pids.push_back(pid);
-      }
+vector<int> LinuxParser::Pids()
+{
+    vector<int> pids;
+    DIR* directory = opendir(kProcDirectory.c_str());
+    struct dirent* file;
+    while ((file = readdir(directory))!=nullptr) {
+        // Is this a directory?
+        if (file->d_type==DT_DIR) {
+            // Is every character of the name a digit?
+            string filename(file->d_name);
+            if (std::all_of(filename.begin(), filename.end(), isdigit)) {
+                int pid = stoi(filename);
+                pids.push_back(pid);
+            }
+        }
     }
-  }
-  closedir(directory);
-  return pids;
+    closedir(directory);
+    return pids;
 }
 
 /* C17 filesystem
@@ -82,7 +83,7 @@ namespace fs = std::filesystem;
 bool is_number(const std::string& s)
 {
     std::string::const_iterator it = s.begin();
-    while (it!=s.end() && std::isdigit(*it)) ++it;
+    while (it!=s.end() && std::isdigit(*it))  +  + it;
     return !s.empty() && it==s.end();
 }
 
@@ -273,7 +274,8 @@ string LinuxParser::Command(int pid)
 {
     string value;
 
-    std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
+    // read command of given PID, i.e. /proc/435/cmdline
+    std::ifstream filestream(kProcDirectory+to_string(pid)+kCmdlineFilename);
     if (filestream.is_open()) std::getline(filestream, value);
 
     return value;
