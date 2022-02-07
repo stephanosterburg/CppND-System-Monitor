@@ -75,8 +75,9 @@ vector<int> LinuxParser::Pids()
 }
 
 /* C17 filesystem
-https://stackoverflow.com/a/4654718/5983691
-https://www.modernescpp.com/index.php/c-17-more-details-about-the-library
+ * Used the following two links as referencing
+ * https://stackoverflow.com/a/4654718/5983691
+ * https://www.modernescpp.com/index.php/c-17-more-details-about-the-library
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -108,7 +109,8 @@ vector<int> LinuxParser::Pids()
 
     return pids;
 }
-END BONUS*/
+ * END BONUS
+ */
 
 // Read and return the system memory utilization
 float LinuxParser::MemoryUtilization()
@@ -295,7 +297,9 @@ string LinuxParser::Ram(int pid)
             std::istringstream linestream(line);
             linestream >> key >> value;
 
-            if (key=="VmSize:")
+            // Using VmRSS instead of VmSize because it gives the exact
+            // physical memory being used as a part of Physical RAM
+            if (key=="VmRSS:")
                 memory << std::fixed << std::setprecision(2) << stof(value)/1024;
         }
     }

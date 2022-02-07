@@ -18,15 +18,16 @@ using std::vector;
 Processor& System::Cpu() { return cpu_; }
 
 // Return a container composed of the system's processes
-vector <Process>& System::Processes()
+vector<Process>& System::Processes()
 {
     processes_.clear();
 
-    vector<int> pids = LinuxParser::Pids();
-    for (int pid: pids) processes_.push_back(Process(pid));
+    const vector<int>& pids = LinuxParser::Pids();
+    for (const int& pid : pids) {
+        processes_.emplace_back(pid);
+    }
 
-    std::sort(processes_.begin(), processes_.end());
-    std::reverse(processes_.begin(), processes_.end());
+    std::sort(processes_.rbegin(), processes_.rend());
 
     return processes_;
 }
