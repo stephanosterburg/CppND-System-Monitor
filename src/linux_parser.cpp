@@ -15,6 +15,7 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+// Template to retrieve a value by given key and file
 template<typename T>
 T getValueByKey(std::string const& keyFilter, std::string const& filename)
 {
@@ -30,8 +31,9 @@ T getValueByKey(std::string const& keyFilter, std::string const& filename)
         }
     }
     return value;
-};
+}
 
+// Template to retrieve a value from a given file
 template<typename T>
 T getValueFromFile(std::string const& filename)
 {
@@ -45,7 +47,7 @@ T getValueFromFile(std::string const& filename)
         linestream >> value;
     }
     return value;
-};
+}
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem()
@@ -110,13 +112,15 @@ vector<int> LinuxParser::Pids()
  * Used the following two links as referencing
  * https://stackoverflow.com/a/4654718/5983691
  * https://www.modernescpp.com/index.php/c-17-more-details-about-the-library
+ * Unfortunately I wasn't able to compile on Udacity the following code snippet
+ * because both C17 <filesystem> and  <experimental/filesystem> errored out.
 
 #include <filesystem>
 namespace fs = std::filesystem;
 bool is_number(const std::string& s)
 {
     std::string::const_iterator it = s.begin();
-    while (it!=s.end() && std::isdigit(*it))  +  + it;
+    while (it!=s.end() && std::isdigit(*it))  ++it;
     return !s.empty() && it==s.end();
 }
 
@@ -255,7 +259,9 @@ int LinuxParser::RunningProcesses()
 // Read and return the command associated with a process
 string LinuxParser::Command(int pid)
 {
-    string value = getValueFromFile<std::string>(kProcDirectory+to_string(pid)+kCmdlineFilename);
+    string value = getValueFromFile<std::string>(kProcDirectory+to_string(pid)+
+            kCmdlineFilename);
+    // Limit string length to 50 characters
     value.resize(50);
     return value;
 }
@@ -264,7 +270,12 @@ string LinuxParser::Command(int pid)
 string LinuxParser::Ram(int pid)
 {
     std::stringstream memory;
-    float value = getValueByKey<float>("VmRSS:", kProcDirectory+to_string(pid)+kStatusFilename);
+    // Using VmRSS instead of VmSize because it gives the exact physical memory
+    // being used as a part of Physical RAM
+    float value = getValueByKey<float>(
+            "VmRSS:", kProcDirectory+to_string(pid)+kStatusFilename);
+    // Setting the precision to 2 to limit the digits behind the comma,
+    // could have set it to 0 as well
     memory << std::fixed << std::setprecision(2) << value/1024;
 
     return memory.str();
@@ -273,7 +284,8 @@ string LinuxParser::Ram(int pid)
 // Read and return the user ID associated with a process
 string LinuxParser::Uid(int pid)
 {
-    return getValueByKey<std::string>("Uid:", kProcDirectory+to_string(pid)+kStatusFilename);;
+    return getValueByKey<std::string>(
+            "Uid:", kProcDirectory+to_string(pid)+kStatusFilename);;
 }
 
 // Read and return the user associated with a process
@@ -313,6 +325,8 @@ long LinuxParser::UpTime(int pid)
         while (linestream >> value) uptime.push_back(value);
     }
 
+    // Regarding "man proc" we need to retrieve the 22nd item in
+    // /proc/my_process_id/stat
     if (!uptime[21].empty()) {
         return LinuxParser::UpTime()-(stol(uptime[21])/sysconf(_SC_CLK_TCK));
     }
